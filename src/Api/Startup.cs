@@ -25,6 +25,7 @@ namespace Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            
             services.AddApiVersioning(options =>
             {
                 // Définit une version par défaut si rien n'est spécifié au niveau du controlleur
@@ -37,6 +38,7 @@ namespace Api
                 options.GroupNameFormat = "'v'VVV";
                 options.SubstituteApiVersionInUrl = true;
             });
+            
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
             services.AddSwaggerGen();
         }
@@ -47,12 +49,14 @@ namespace Api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {
                     foreach (var description in provider.ApiVersionDescriptions)
                     {
-                        c.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
+                        c.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", 
+                            description.GroupName.ToUpperInvariant());
                     }
                 });
             }
